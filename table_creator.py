@@ -16,24 +16,50 @@ if len(sys.argv) < 3:
     raise SyntaxError("Please use correct syntax.\nFor further help, type : python3 table_creator.py --help")
 
 
-# Add all files paths
-paths = []
-for given_path in sys.argv[2:]:
-    # It is a file
-    if os.path.exists(given_path) and os.path.isfile(given_path):
-        paths.append(given_path)
+def get_all_path() -> list[str]:
+    """
+    Get all paths given in argv.
+    Scan all directories given.
+    :return: - All the path leading to files
+    """
+    paths = []
+    for given_path in sys.argv[2:]:
+        # It is a file
+        if os.path.exists(given_path) and os.path.isfile(given_path):
+            paths.append(given_path)
 
-    # It is a directory
-    if os.path.exists(given_path) and os.path.isdir(given_path):
-        for file in os.listdir(given_path):
-            if os.path.isfile(given_path + "/" + file):
-                paths.append(given_path + "/" + file)
+        # It is a directory
+        if os.path.exists(given_path) and os.path.isdir(given_path):
+            for file in os.listdir(given_path):
+                if os.path.isfile(given_path + "/" + file):
+                    paths.append(given_path + "/" + file)
 
-# Helper function
+
+# Helper functions
 process_header = lambda e: e.replace(",", "").replace("(", "").replace(")", "").replace("'", "")
 process_entry = lambda e: e.split(",")
+get_table_name = lambda e: (e.split("/")[-1]).split(".")[0].upper()
 
-def get_recommanded_type(entry):
+
+def get_raw_table(file: TextIOWrapper) -> list[list[str]]:
+        """
+        Get raw table header and entries.
+        :return: - Header and entries
+        """
+        header, *entries = file.readlines()
+
+        header = "".join(list(map(process_header, header)))[1:-2]
+        header = header.split('""')
+
+        return header, entries
+
+
+def get_recommanded_type(entry: str) -> str:
+    """
+    Get recommanded type based on given entry.
+    If no type can be found, return "-".
+    :return: - The recommande type
+    """
     if entry == "":
         return "-"
     
@@ -54,18 +80,13 @@ print(f"{' Createur de table ':-^63}")
 print("\nPour valider le type proposé, appuyez sur ENTRER, sinon entrez un nouveau type.")
 print("Si un type n'a pas pu être déterminé à partir de la base, il faut le renseigner.")
 
-for path in paths:
+for path in get_all_path():
     with open(path, "r", encoding="utf8") as file:
-        table_name = (path.split("/")[-1]).split(".")[0]
-        header, *entries = file.readlines()
-
-        header = "".join(list(map(process_header, header)))[1:-2]
-        header = header.split('""')
-
+        table_name = get_table_name(path)
+        header, entries = get_raw_table(file)
         first_entry = process_entry(entries[0])
         
         request = "("
-
         print(f"\n{' ' + table_name + ' ':=^63}\n")
 
         print(f"{'Argument name':^20}|{'Recommanded type':^20}|{'Entered type':^20}")
