@@ -211,3 +211,6 @@ for path in paths:
         value_count = len(values[0])
 
         cursor.executemany("INSERT INTO " + table_name + " VALUES (" + ", ".join(["?"] * value_count) + ")", values)
+
+cursor.close()
+db.close()
