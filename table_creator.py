@@ -168,8 +168,12 @@ for path in paths:
             request += title + " " + inputed_type + ", "
 
         primary_keys = tuple(input("Entrez les clés primaires (séparées par ',') : ").split(","))
-        primary_keys_tables[table_name] = primary_keys
-        request += f"PRIMARY KEY ({', '.join(primary_keys)})"
+        if primary_keys != ("",):
+            primary_keys_tables[table_name] = primary_keys
+            request += f"PRIMARY KEY ({', '.join(primary_keys)})"
+        else:
+            primary_keys_tables[table_name] = "AUTOCREATED"
+            request = request[:-2]
 
         tables_requests[table_name] = request
 
@@ -213,4 +217,5 @@ for path in paths:
         cursor.executemany("INSERT INTO " + table_name + " VALUES (" + ", ".join(["?"] * value_count) + ")", values)
 
 cursor.close()
+db.commit()
 db.close()
