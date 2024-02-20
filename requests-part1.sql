@@ -16,14 +16,14 @@
 
 -- REQUETE QUESTION 3
 
--- with espagnols as (
---     select mid from 
---         movies natural join titles
---     where region = "ES"
--- )
--- select distinct primaryName from
---     persons natural join writers natural join movies
--- where mid not in espagnols;
+with espagnols as (
+    select mid from 
+        movies natural join titles
+    where region = "ES"
+)
+select distinct primaryName from
+    persons natural join writers natural join movies
+where mid not in espagnols;
 
 -- REQUETE QUESTION 4
 

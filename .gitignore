@@ -2,4 +2,4 @@ imdb-full/
 mongo-db/
 full.db
 mongod
-mongod
+mongos
