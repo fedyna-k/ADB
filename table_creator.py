@@ -137,7 +137,7 @@ def get_table(tables: dict, primary_keys: dict, key: str) -> str:
 # Connect to data-base
 db = sqlite3.connect(sys.argv[1] + ".db")
 cursor = db.cursor()
-
+    
 print(f"{' Createur de table ':-^63}")
 print("\nPour valider le type proposé, appuyez sur ENTRER, sinon entrez un nouveau type.")
 print("Si un type n'a pas pu être déterminé à partir de la base, il faut le renseigner.")
