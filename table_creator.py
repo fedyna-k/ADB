@@ -43,6 +43,8 @@ process_header = lambda e: e.replace(",", "").replace("(", "").replace(")", "").
 get_table_name = lambda e: (e.split("/")[-1]).split(".")[0].upper()
 
 def process_entry(line):
+    line = line.replace("\r", "").replace("\n", "")
+
     args = []
     current = ""
     i = 0
@@ -211,10 +213,13 @@ for path in paths:
     with open(path, "r", encoding="utf8") as file:
         table_name = get_table_name(path)
         print("Table : " + table_name + "...")
-        values = list(map(process_entry, file.readlines()[1:]))
-        value_count = len(values[0])
+        # Get rid of header
+        file.readline()
 
-        cursor.executemany("INSERT INTO " + table_name + " VALUES (" + ", ".join(["?"] * value_count) + ")", values)
+        while (line := file.readline()):
+            values = process_entry(line)
+            value_count = len(values)
+            cursor.execute("INSERT INTO " + table_name + " VALUES (" + ", ".join(["?"] * value_count) + ")", values)
 
 cursor.close()
 db.commit()
