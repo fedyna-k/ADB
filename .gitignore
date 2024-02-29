@@ -1,5 +1,7 @@
 imdb-full/
+imdb-tiny/
 mongo-db/
-full.db
+databases/
+script/db/__pycache__/
 mongod
 mongos
