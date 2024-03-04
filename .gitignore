@@ -5,3 +5,5 @@ databases/
 script/db/__pycache__/
 mongod
 mongos
+mongod.exe
+mongos.exe

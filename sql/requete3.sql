@@ -5,5 +5,6 @@ with espagnols as (
     where region = 'ES'
 )
 select distinct primaryName from
-    persons natural join writers
-where mid not in espagnols;
+   writers left join espagnols on espagnols.mid = writers.mid
+   natural join persons
+where espagnols.mid is null;
