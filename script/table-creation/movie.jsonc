@@ -75,6 +75,8 @@
     "episodes": [
         {
             "mid": "string",
+            "seasonNumber": "number",
+            "episodeNumber": "number",
             "primaryTitle": "string",
             "isAdult": "boolean",
             "startYear": "number",
