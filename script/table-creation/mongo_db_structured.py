@@ -26,6 +26,10 @@ mongo_database.drop_collection("json_movies")
 # Get all movies without automatic _id
 movie_cursor = mongo_database.movies.find({}, {"_id": 0})
 batch = []
+total = mongo_database.movies.count_documents({})
+total_length = len(str(total))
+current = 0
+
 
 for movie in movie_cursor:
     # Get the basic information
@@ -123,9 +127,14 @@ for movie in movie_cursor:
         } for episode in episodes for info in episodes_info if episode["mid"] == info["mid"]]
 
     batch.append(struct)
+    current += 1
+    sys.stdout.write(f"\rMovies done : {str(current).zfill(total_length)}/{total} ({round(100 * current / total, 2)} %)")
+
     if len(batch) == 100:
         mongo_database.json_movies.insert_many(batch)
         batch = []
 
 if len(batch) != 0:
     mongo_database.json_movies.insert_many(batch)
+
+print("")
