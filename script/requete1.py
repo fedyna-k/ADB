@@ -1,6 +1,20 @@
 #! /usr/bin/env python
 
-from script.utils.common import *
+"""
+---------------------
+Script for 1st query.
+---------------------
+Usage : ./requete1.py [full|tiny]
+
+Defaults to full database.
+"""
+
+
+from utils.common import *
+
+
+mongo_database = get_database(("full", "tiny"), True)
+
 
 # Find jean and his characters
 jean = mongo_database.persons.find_one({

@@ -1,6 +1,20 @@
 #! /usr/bin/env python
 
-from script.utils.common import *
+"""
+---------------------
+Script for 2nd query.
+---------------------
+Usage : ./requete2.py [full|tiny]
+
+Defaults to full database.
+"""
+
+
+from utils.common import *
+
+
+mongo_database = get_database(("full", "tiny"), True)
+
 
 # Find all the millenials movies
 millenials_movies = mongo_database.movies.find({
