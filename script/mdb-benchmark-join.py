@@ -24,7 +24,6 @@ if __name__ != "__main__":
 from utils.join import *
 from time import monotonic_ns
 from sys import stdout
-from importlib import import_module
 
 
 # Get database
