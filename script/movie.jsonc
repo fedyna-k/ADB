@@ -1,0 +1,87 @@
+/**
+ * JSON structure for mongodb structured movie database
+ * 
+ * For the website to be created, we must add a persons.json
+ * That will be able to read from a "pid".
+ */
+{
+    // General information
+    "mid": "string",
+    "isAdult": "boolean",
+    "startYear": "number",
+    "endYear": "number",
+    "runtimeMinutes": "number",
+    // Ratings table
+    "averageRating": "number",
+    "numVotes": "number",
+    // Title table merged with movie title information
+    "titles": {
+        "type": "string",
+        "primary": "string",
+        "original": "string",
+        "locale": [ // "ordering" column is used as index for the array
+            {
+                "title": "string",
+                "region": "string",
+                "language": "string",
+                "type": "string",
+                "attributes": "string",
+                "isOriginal": "boolean"
+            }
+            // etc...
+        ]
+    },
+    // Genre table
+    "genres": [
+        "string"
+        // etc...
+    ],
+    // Characters table, where pid is replaced by actor name
+    "characters": [
+        {
+            "pid": "string",
+            "name": "string",
+            "actor": "string"
+        }
+        // etc...
+    ],
+    // Writers table
+    "writers": [
+        {
+            "pid": "string",
+            "name": "string"
+        }
+        // etc...
+    ],
+    // Directors table
+    "directors": [
+        {
+            "pid": "string",
+            "name": "string"
+        }
+        // etc...
+    ],
+    // Principals table
+    "principals": [ // "ordering" column is used as index for the array
+        {
+            "pid": "string",
+            "name": "string",
+            "category": "string",
+            "job": "string"
+        }
+    ],
+    // For the full database
+    // Note that this only applies to series
+    "episodes": [
+        {
+            "mid": "string",
+            "seasonNumber": "number",
+            "episodeNumber": "number",
+            "primaryTitle": "string",
+            "isAdult": "boolean",
+            "startYear": "number",
+            "endYear": "number",
+            "runtimeMinutes": "number"
+        }
+    ]
+}

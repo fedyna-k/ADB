@@ -2,7 +2,7 @@ imdb-full/
 imdb-tiny/
 mongo-db/
 databases/
-script/db/__pycache__/
+script/utils/__pycache__/
 mongod
 mongos
 mongod.exe
