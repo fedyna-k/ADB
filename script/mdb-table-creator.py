@@ -1,7 +1,19 @@
 #! /usr/bin/env python
 
-import pymongo
+
+"""
+-----------------------------
+MongoDB table creator script.
+-----------------------------
+Create all mongodb tables based on sqlite tables.
+
+This script also create all associated index as mongodb
+only add index on the "_id" field.
+"""
+
+
 import sqlite3
+from utils.common import *
 from utils.indexer import add_all_indexes
 
 
@@ -12,21 +24,13 @@ TABLES = ["characters", "directors", "episodes", "genres", "knownformovies", "mo
 sqlite_database = sqlite3.connect("databases/full.db")
 sqlite_cursor = sqlite_database.cursor()
 
-# Mongo db client
-mongo_client = pymongo.MongoClient()
-mongo_database = mongo_client.BDA
+# MongoDB database
+mongo_database = get_database(("full", "tiny"))
 
-# Create all collections
-# PyMongo requires an insert to create a collection
-# So we send an insert request, creating the collection
-# then we empty the collection using a delete without filters.
-for table in TABLES:
-    mongo_database[table].insert_one({})
-    mongo_database[table].delete_many({})
-
+# Helper function
 apply_keys = lambda k, v : dict(map(lambda i, j : (i, j), k, v))
 
-# Fill table with information
+# Fill collections with information
 for table in TABLES:
     print(f"Cloning data from table {table}...")    # Sprinkle some UX
     data = sqlite_cursor.execute(f"select * from {table};")
@@ -36,12 +40,9 @@ for table in TABLES:
         mongo_database[table].insert_many(batch)
 
 
-# Closing connections
+# Closing connections for sqlite
 sqlite_cursor.close()
-sqlite_database.commit()
 sqlite_database.close()
 
 print("Create all indexes...")
 add_all_indexes(mongo_database)
-
-mongo_client.close()
