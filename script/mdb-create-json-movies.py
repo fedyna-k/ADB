@@ -23,6 +23,7 @@ if __name__ != "__main__":
 
 from utils.join import *
 from sys import stdout
+from utils.indexer import add_json_movie_indexes
 
 
 # Get database and prepare it
@@ -56,4 +57,5 @@ for movie in movie_cursor:
 if len(batch) != 0:
     mongo_database.json_movies.insert_many(batch)
 
-print("")
+print("\nCreate all indexes...")
+add_json_movie_indexes(mongo_database)

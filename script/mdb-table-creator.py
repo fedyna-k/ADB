@@ -2,6 +2,8 @@
 
 import pymongo
 import sqlite3
+from utils.indexer import add_all_indexes
+
 
 # Table names
 TABLES = ["characters", "directors", "episodes", "genres", "knownformovies", "movies", "persons", "principals", "professions", "ratings", "titles", "writers"]
@@ -38,5 +40,8 @@ for table in TABLES:
 sqlite_cursor.close()
 sqlite_database.commit()
 sqlite_database.close()
+
+print("Create all indexes...")
+add_all_indexes(mongo_database)
 
 mongo_client.close()
