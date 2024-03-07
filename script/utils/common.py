@@ -1,5 +1,5 @@
 """
-Common file for queries.
+Common module for queries.
 Imports pymongo and defines the utils functions.
 """
 

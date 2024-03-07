@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-from common import *
+from script.utils.common import *
 
 # Find jean and his characters
 jean = mongo_database.persons.find_one({ "primaryName": "Jean Reno" })

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-from common import *
+from script.utils.common import *
 
 # Get all movies that were released in Spain
 spanish_movies = mongo_database.titles.find({ "region": "ES" }, {"mid": 1, "_id": 0})

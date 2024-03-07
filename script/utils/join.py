@@ -3,7 +3,12 @@ Module that contains functions to join movie table.
 """
 
 
-from common import *
+# Guard clause from launch
+if __name__ == "__main__":
+    raise ImportError("This file must be imported.")
+
+
+from .common import *
 
 
 def __movie_join_locale(movie: dict, database: Database) -> dict:

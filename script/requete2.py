@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-from common import *
+from script.utils.common import *
 
 # Find all the millenials movies
 millenials_movies = mongo_database.movies.find({ "startYear" : {"$gt": 1999, "$lt": 2010} }, {"mid": 1, "_id": 0})
