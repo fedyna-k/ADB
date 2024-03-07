@@ -1,6 +1,20 @@
 #! /usr/bin/env python
 
-from common import *
+"""
+---------------------
+Script for 4th query.
+---------------------
+Usage : ./requete4.py [full|tiny]
+
+Defaults to full database.
+"""
+
+
+from utils.common import *
+
+
+mongo_database = get_database(("full", "tiny"), True)
+
 
 # Get the maximum roles played by one actor in same movie
 max_different_roles = mongo_database.characters.aggregate([

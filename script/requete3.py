@@ -1,6 +1,20 @@
 #! /usr/bin/env python
 
-from script.utils.common import *
+"""
+---------------------
+Script for 3rd query.
+---------------------
+Usage : ./requete3.py [full|tiny]
+
+Defaults to full database.
+"""
+
+
+from utils.common import *
+
+
+mongo_database = get_database(("full", "tiny"), True)
+
 
 # Get all movies that were released in Spain
 spanish_movies = mongo_database.titles.find({ "region": "ES" }, {"mid": 1, "_id": 0})
