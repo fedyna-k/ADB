@@ -14,7 +14,7 @@ from pymongo.database import Database
 from sys import argv
 
 
-mongo_client = pymongo.MongoClient()
+mongo_client = pymongo.MongoClient("192.168.1.31")
 
 
 def get_database(arguments: tuple[str, str]|None = None, optional=False, argv_index=1) -> Database:
