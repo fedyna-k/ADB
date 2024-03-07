@@ -6,7 +6,7 @@ Module that contains functions to join movie table.
 from common import *
 
 
-def __join_locale(movie: dict, database: Database) -> dict:
+def __movie_join_locale(movie: dict, database: Database) -> dict:
     """
     Join all locale title to a movie.
     :param: movie - The movie as dictionary.
@@ -31,7 +31,7 @@ def __join_locale(movie: dict, database: Database) -> dict:
     return movie
 
 
-def __join_genres(movie: dict, database: Database) -> dict:
+def __movie_join_genres(movie: dict, database: Database) -> dict:
     """
     Join all genres to a movie.
     :param: movie - The movie as dictionary.
@@ -47,7 +47,7 @@ def __join_genres(movie: dict, database: Database) -> dict:
     return movie
 
 
-def __join_characters(movie: dict, database: Database) -> dict:
+def __movie_join_characters(movie: dict, database: Database) -> dict:
     """
     Join all characters to a movie.
     :param: movie - The movie as dictionary.
@@ -80,7 +80,7 @@ def __join_characters(movie: dict, database: Database) -> dict:
     return movie
 
 
-def __join_writers(movie: dict, database: Database) -> dict:
+def __movie_join_writers(movie: dict, database: Database) -> dict:
     """
     Join all writers to a movie.
     :param: movie - The movie as dictionary.
@@ -112,7 +112,7 @@ def __join_writers(movie: dict, database: Database) -> dict:
     return movie
 
 
-def __join_directors(movie: dict, database: Database) -> dict:
+def __movie_join_directors(movie: dict, database: Database) -> dict:
     """
     Join all directors to a movie.
     :param: movie - The movie as dictionary.
@@ -144,7 +144,7 @@ def __join_directors(movie: dict, database: Database) -> dict:
     return movie
 
 
-def __join_principals(movie: dict, database: Database) -> dict:
+def __movie_join_principals(movie: dict, database: Database) -> dict:
     """
     Join all principals to a movie.
     :param: movie - The movie as dictionary.
@@ -178,7 +178,7 @@ def __join_principals(movie: dict, database: Database) -> dict:
     return movie
 
 
-def __join_episodes(movie: dict, database: Database) -> dict:
+def __movie_join_episodes(movie: dict, database: Database) -> dict:
     """
     Join all episodes to a movie.
     :param: movie - The movie as dictionary.
@@ -238,14 +238,14 @@ def movie_join(movie: dict, database: Database) -> dict:
         }
     }
 
-    movie = __join_locale(movie, database)
-    movie = __join_genres(movie, database)
-    movie = __join_characters(movie, database)
-    movie = __join_writers(movie, database)
-    movie = __join_directors(movie, database)
-    movie = __join_principals(movie, database)
+    movie = __movie_join_locale(movie, database)
+    movie = __movie_join_genres(movie, database)
+    movie = __movie_join_characters(movie, database)
+    movie = __movie_join_writers(movie, database)
+    movie = __movie_join_directors(movie, database)
+    movie = __movie_join_principals(movie, database)
 
     if "episodes" in database.list_collection_names():
-        movie = __join_episodes(movie, database)
+        movie = __movie_join_episodes(movie, database)
 
     return movie
