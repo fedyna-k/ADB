@@ -7,7 +7,7 @@ import sqlite3
 TABLES = ["characters", "directors", "episodes", "genres", "knownformovies", "movies", "persons", "principals", "professions", "ratings", "titles", "writers"]
 
 # SQLite client
-sqlite_database = sqlite3.connect("full.db")
+sqlite_database = sqlite3.connect("databases/full.db")
 sqlite_cursor = sqlite_database.cursor()
 
 # Mongo db client
