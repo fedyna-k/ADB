@@ -1,0 +1,21 @@
+footer {
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    position: relative;
+}
+
+footer > p {
+    color: #666;
+    font-style: italic;
+}
+
+footer::before {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background-color: #aaa;
+}

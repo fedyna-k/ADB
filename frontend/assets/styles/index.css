@@ -1,0 +1,23 @@
+#show-off {
+    font: 8rem "Space Mono";
+    text-align: center;
+}
+
+#after-show {
+    font-size: 4em;
+    text-align: center;
+    filter: opacity(0);
+    transform: translateY(2rem);
+    animation: appear 500ms ease-in-out 3.5s 1 forwards;
+}
+
+@keyframes appear {
+    from {
+        filter: opacity(0);
+        transform: translateY(2rem);
+    }
+    to {
+        filter: opacity(1);
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,66 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 3rem;
+    position: relative;
+}
+
+header::before {
+    position: absolute;
+    content: "";
+    bottom: 0;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background-color: #aaa;
+}
+
+header > h1 > a {
+    color: black;
+    text-decoration: none;
+}
+
+#searchbar > input {
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    width: 12rem;
+    transition: width 200ms ease-in-out;
+}
+
+#searchbar > input:focus {
+    width: 24rem;
+}
+
+#searchbar > img {
+    cursor: pointer;
+    transition: filter 200ms ease-in-out;
+}
+
+#searchbar > img:hover {
+    filter: invert(89%) sepia(18%) saturate(3879%) hue-rotate(355deg) brightness(97%) contrast(108%);
+}
+
+#searchbar {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#searchbar::before {
+    position: absolute;
+    content: "";
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #444;
+    transition: all 200ms ease-in-out;
+}
+
+#searchbar:focus-within::before {
+    background-color: #ffd400;
+    height: 2px;
+}
