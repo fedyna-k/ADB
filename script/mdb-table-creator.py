@@ -12,6 +12,11 @@ only add index on the "_id" field.
 """
 
 
+# Guard clause from import
+if __name__ != "__main__":
+    raise ImportError("This file can't be imported.")
+
+
 import sqlite3
 from utils.common import *
 from utils.indexer import add_all_indexes
