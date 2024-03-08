@@ -159,7 +159,7 @@ QUERY PLAN
 
 ### Non indexée
 
-**Temps d'exécution** : 339.564
+**Temps d'exécution** : 339.564 secondes
 
 **Plan de requête** : 
 ```
@@ -174,7 +174,6 @@ QUERY PLAN
 |  |     |  |  |--SCAN ratings
 |  |     |  |  |--SEARCH movies USING INDEX sqlite_autoindex_MOVIES_1 (mid=?)
 |  |     |  |  |--SEARCH principals USING AUTOMATIC COVERING INDEX (mid=?)
-|  |     |  |  |--SEARCH persons USING COVERING INDEX sqlite_autoindex_PERSONS_1 (pid=?)
 |  |     |  |  `--USE TEMP B-TREE FOR DISTINCT
 |  |     |  `--SCAN connusap
 |  |     `--EXCEPT USING TEMP B-TREE
@@ -182,7 +181,6 @@ QUERY PLAN
 |  |        |  |--SCAN ratings
 |  |        |  |--SEARCH movies USING INDEX sqlite_autoindex_MOVIES_1 (mid=?)
 |  |        |  |--SEARCH principals USING AUTOMATIC COVERING INDEX (mid=?)
-|  |        |  |--SEARCH persons USING COVERING INDEX sqlite_autoindex_PERSONS_1 (pid=?)
 |  |        |  `--USE TEMP B-TREE FOR DISTINCT
 |  |        `--SCAN connusav
 |  `--SCAN connus
@@ -212,7 +210,6 @@ QUERY PLAN
 |  |     |  |  |--SEARCH ratings USING INDEX rat_num (numVotes>?)
 |  |     |  |  |--SEARCH movies USING INDEX sqlite_autoindex_MOVIES_1 (mid=?)
 |  |     |  |  |--SEARCH principals USING INDEX prin_mid (mid=?)
-|  |     |  |  |--SEARCH persons USING COVERING INDEX sqlite_autoindex_PERSONS_1 (pid=?)
 |  |     |  |  `--USE TEMP B-TREE FOR DISTINCT
 |  |     |  `--SCAN connusap
 |  |     `--EXCEPT USING TEMP B-TREE
@@ -220,7 +217,6 @@ QUERY PLAN
 |  |        |  |--SEARCH ratings USING INDEX rat_num (numVotes>?)
 |  |        |  |--SEARCH movies USING INDEX sqlite_autoindex_MOVIES_1 (mid=?)
 |  |        |  |--SEARCH principals USING INDEX prin_mid (mid=?)
-|  |        |  |--SEARCH persons USING COVERING INDEX sqlite_autoindex_PERSONS_1 (pid=?)
 |  |        |  `--USE TEMP B-TREE FOR DISTINCT
 |  |        `--SCAN connusav
 |  `--SCAN connus

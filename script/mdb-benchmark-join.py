@@ -27,7 +27,7 @@ from sys import stdout
 
 
 # Get database
-mongo_database = get_database(("-f", "-t"), optional=True)
+mongo_database = get_database(("full", "tiny"), optional=True)
 
 # Get a good batch of movies (entire database for tiny one)
 movie_sample = mongo_database.movies.aggregate([{"$sample": {"size": 1000}}])

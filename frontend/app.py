@@ -60,7 +60,7 @@ def movie(mid):
     :return: The loaded file or a HTTP error
     """
     corresponding = movies.find_one(
-        {"mid": {"$regex": f"{mid}", "$options": "i"}},
+        {"mid": mid},
         hint="mid_1"
     )
 

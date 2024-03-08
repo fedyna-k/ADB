@@ -12,7 +12,7 @@ the database size. On my computer it took about 12h
 to compute all movies for the full database, whereas
 it took only 5s for the tiny one.
 
-Note that it doesn't add the indexes.
+This script also add indexes on json_movies.
 """
 
 
