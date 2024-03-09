@@ -3,6 +3,7 @@ imdb-tiny/
 mongo-db/
 databases/
 script/utils/__pycache__/
+frontend/__pycache__/
 mongod
 mongos
 mongod.exe
