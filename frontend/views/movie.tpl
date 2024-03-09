@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../assets/styles/main.css">
     <link rel="stylesheet" href="../assets/styles/header.css">
     <link rel="stylesheet" href="../assets/styles/footer.css">
+    <link rel="stylesheet" href="../assets/styles/movie.css">
 
     <script src="../assets/scripts/searchbar.js" defer></script>
 </head>
@@ -21,7 +22,64 @@
     </header>
 
     <section>
-        <h2>{{movie["titles"]["primary"]}}</h2>
+        <div id="card">
+            <img src="{{image}}" alt="{{movie['titles']['primary']}}">
+            <div class="info">
+                % if movie["isAdult"]:
+                <h2>{{movie["titles"]["primary"]}} <span id="adult-tag">ADULT</span></h2>
+                % else:
+                <h2>{{movie["titles"]["primary"]}}</h2>
+                % end
+                % if movie["runtimeMinutes"]:
+                % if int(movie["runtimeMinutes"]) > 60:
+                <p>Runtime: </p>
+                <p>{{movie["runtimeMinutes"] // 60}}h{{movie["runtimeMinutes"] % 60}}min</p>
+                % else:
+                <p>Runtime: </p>
+                <p>{{movie["runtimeMinutes"]}}min</p>
+                % end
+                % end
+                % if movie["endYear"]:
+                <p>First aired: </p>
+                <p>{{movie["startYear"]}}</p>
+                <p>Last aired: </p>
+                <p>{{movie["endYear"]}}</p>
+                % else:
+                <p>Release date: </p>
+                <p>{{movie["startYear"]}}</p>
+                % end
+                <p>Genres: </p>
+                <p>{{", ".join(movie["genres"])}}</p>
+                <p>Average rating: </p>
+                % if "averageRating" in movie:
+                <p>{{movie["averageRating"]}}/10 (on {{movie["numVotes"]}} votes)</p>
+                % else:
+                <p>No rating yet...</p>
+                % end
+                <p>Writers:</p>
+                <p>{{", ".join([w["name"] for w in movie["writers"]])}}</p>
+                <p>Directors:</p>
+                <p>{{", ".join([w["name"] for w in movie["directors"]])}}</p>
+                <h3>Characters</h3>
+                % for char in movie["characters"]:
+                <p>{{char["actor"]}}</p>
+                <p>{{char["name"]}}</p>
+                % end
+            </div>
+        </div>
+
+        <h3>Locale:</h3>
+        <div id="locale">
+            % from flag import get_flag_emoji
+            % for locale in sorted(movie["titles"]["locale"], key=lambda a: a["region"]):
+            % if len(locale["region"]) == 2:
+            <div>
+                <p>{{get_flag_emoji(locale["region"])}}</p>
+                <p>{{locale["title"]}}</p>
+            </div>
+            % end
+            % end
+        </div>
     </section>
 
     <footer>

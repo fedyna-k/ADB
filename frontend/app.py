@@ -17,10 +17,11 @@ if __name__ != "__main__":
 
 import bottle
 import pymongo
+import requests
 
 
 mongo_client = pymongo.MongoClient("192.168.1.31")
-mongo_database = mongo_client.BDAtiny
+mongo_database = mongo_client.BDA
 movies = mongo_database.json_movies
 
 
@@ -41,14 +42,23 @@ def search(pattern):
     :return: The loaded file or a HTTP error
     """
     corresponding = list(movies.find(
-        {"titles.primary": {"$regex": f"{pattern}", "$options": "i"}},
-        limit=50
+        {
+            "titles.primary": {"$regex": f"{pattern}", "$options": "i"},
+            "titles.type": {"$in": ["tvSeries", "movie"]}
+        },
+        limit=10
     ))
 
     if len(corresponding) == 1:
         bottle.redirect(f"/{corresponding[0]['mid']}")
 
-    return {"movies": corresponding, "pattern": pattern}
+    images = {}
+    for movie in corresponding:
+        response = requests.get(f"http://www.omdbapi.com/?i={movie['mid']}&apikey=6bcb818c").json()
+        if "Poster" in response:
+            images[movie["mid"]] = response["Poster"]
+
+    return {"movies": corresponding, "images": images, "pattern": pattern}
 
 
 @bottle.route("/<mid>")
@@ -64,7 +74,9 @@ def movie(mid):
         hint="mid_1"
     )
 
-    return {"movie": corresponding}
+    image = requests.get(f"http://www.omdbapi.com/?i={mid}&apikey=6bcb818c").json()["Poster"]
+
+    return {"movie": corresponding, "image": image}
 
 
 @bottle.route("/assets/<filepath:re:.*\.css>")

@@ -11,6 +11,21 @@ if __name__ == "__main__":
 from .common import *
 
 
+def __movie_join_ratings(movie: dict, database: Database) -> dict:
+    """
+    Join ratings to a movie.
+    :param: movie - The movie as dictionary.
+    :param: database - The MongoDB database object.
+    :return: The new dictionary
+    """
+    ratings = database.ratings.find_one({"mid": movie["mid"]})
+
+    movie["averageRating"] = ratings["averageRating"]
+    movie["numVotes"] = ratings["numVotes"]
+    
+    return movie
+
+
 def __movie_join_locale(movie: dict, database: Database) -> dict:
     """
     Join all locale title to a movie.
@@ -243,6 +258,7 @@ def movie_join(movie: dict, database: Database) -> dict:
         }
     }
 
+    movie = __movie_join_ratings(movie, database)
     movie = __movie_join_locale(movie, database)
     movie = __movie_join_genres(movie, database)
     movie = __movie_join_characters(movie, database)
