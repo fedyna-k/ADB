@@ -18,10 +18,20 @@ if __name__ != "__main__":
 import bottle
 import pymongo
 import requests
+import sys
 
 
-mongo_client = pymongo.MongoClient("192.168.1.31")
-mongo_database = mongo_client.BDA
+if len(sys.argv) > 1:
+    mongo_client = pymongo.MongoClient(sys.argv[1], serverSelectionTimeoutMS=1000)
+else:
+    mongo_client = pymongo.MongoClient(serverSelectionTimeoutMS=1000)
+mongo_client.server_info()
+
+if len(sys.argv) > 2 and sys.argv[2] == 'tiny':
+    mongo_database = mongo_client.BDAtiny
+else:
+    mongo_database = mongo_client.BDA
+    
 movies = mongo_database.json_movies
 
 
