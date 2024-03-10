@@ -48,3 +48,19 @@
     gap: 2em;
     align-items: flex-start;
 }
+
+#episodes {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    align-items: center;
+}
+
+#episodes > h4 {
+    grid-column: span 4;
+}
+
+#episodes > a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}

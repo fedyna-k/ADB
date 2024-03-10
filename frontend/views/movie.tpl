@@ -68,6 +68,32 @@
             </div>
         </div>
 
+        % if len(movie["episodes"]):
+        <h3>Episodes:</h3>
+        <div id="episodes">
+            % season = 0
+            % for episode in sorted(sorted(movie["episodes"], key=lambda a: a["episodeNumber"]), key=lambda a: a["seasonNumber"]):
+            
+            % if season != episode["seasonNumber"]:
+            % season += 1
+            <h4>Season {{season}}</h4>
+            % end
+            <p>{{episode["episodeNumber"]}}</p>
+            <a href="{{episode['mid']}}">{{episode["primaryTitle"]}}</a>
+            <p>Released: {{episode["startYear"]}}</p>
+            % if episode["runtimeMinutes"]:
+            % if int(episode["runtimeMinutes"]) > 60:
+            <p>Runtime: {{episode["runtimeMinutes"] // 60}}h{{episode["runtimeMinutes"] % 60}}min</p>
+            % else:
+            <p>Runtime: {{episode["runtimeMinutes"]}}min</p>
+            % end
+            % else:
+            <p></p>
+            % end
+            % end
+        </div>
+        % end
+
         <h3>Locale:</h3>
         <div id="locale">
             % from flag import get_flag_emoji
