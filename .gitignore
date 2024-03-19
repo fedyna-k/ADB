@@ -1,6 +1,8 @@
 imdb-full/
 imdb-tiny/
 mongo-db/
+mongo-db-repl1/
+mongo-db-repl2/
 databases/
 script/utils/__pycache__/
 frontend/__pycache__/

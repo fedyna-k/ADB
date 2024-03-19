@@ -68,7 +68,7 @@
             </div>
         </div>
 
-        % if len(movie["episodes"]):
+        % if "episodes" in movie and len(movie["episodes"]):
         <h3>Episodes:</h3>
         <div id="episodes">
             % season = 0
