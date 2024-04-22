@@ -10,3 +10,4 @@ mongod
 mongos
 mongod.exe
 mongos.exe
+mongosh.exe
