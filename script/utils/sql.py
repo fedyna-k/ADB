@@ -3,6 +3,11 @@ Module that contains functions to create SQL table.
 """
 
 
+# Guard clause from launch
+if __name__ == "__main__":
+    raise ImportError("This file must be imported.")
+
+
 import sys
 import os
 import re

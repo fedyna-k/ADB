@@ -7,7 +7,8 @@ Synchronisation wrapper (S2M)
 -----------------------------
 Allow to impact change from SQLite to MongoDB.
 
-Might need to be used as a replacement of SQLite CLI...
+Because SQLite can't trigger external interface, we have to
+use this file as a CLI for INSERT, UPDATE, and DELETE.
 """
 
 
@@ -17,10 +18,10 @@ if __name__ != "__main__":
 
 
 from utils.common import *
+from utils.threads import *
 from ctypes import *
 import sqlite3
 import sys
-import threading
 
 
 # Constants found on the web
@@ -31,70 +32,31 @@ SQLITE_UPDATE = 23
 
 # Get databases
 mdb_database = get_database(("full", "tiny"))
-
-# Load sqlite3
 current_path = sys.path[0]
 dll = CDLL(current_path + "/lib/sqlite3.dll")
 
-# Semaphore used for CLI print synchronisation
-sem = threading.Lock()
-
 # Get sqlite database in C
 db = c_void_p()
-if argv[1] == "tiny":
+if len(argv) == 2 and argv[1] == "tiny":
     dll.sqlite3_open((current_path + '/../databases/tiny.db').encode(), byref(db))
     sql_database = sqlite3.connect(current_path + '/../databases/tiny.db').cursor()
-elif argv[1] == "full":
+elif len(argv) == 2 and argv[1] == "full":
     dll.sqlite3_open((current_path + '/../databases/full.db').encode(), byref(db))
     sql_database = sqlite3.connect(current_path + '/../databases/full.db').cursor()
 else:
     raise ArgumentError("Usage: ./sync-sqlite-to-mdb.py <full|tiny>")
 
 
-# Helper function
-apply_keys = lambda k, v : dict(map(lambda i, j : (i, j), k, v))
-
-
-def __delete(table_name, row_data, columns):
-    mdb_database[table_name].delete_one(apply_keys(columns, row_data))
-    print(f"[ \x1b[92mOK\x1b[0m ] Deleted row in MongoDB '{table_name}' collection")
-    sem.release()
-
-
-def __insert(table_name, row_id):
-    if argv[1] == "tiny":
-        sql_database = sqlite3.connect(current_path + '/../databases/tiny.db').cursor()
-    elif argv[1] == "full":
-        sql_database = sqlite3.connect(current_path + '/../databases/full.db').cursor()
-
-    cursor = sql_database.execute(f"select * from {table_name} where rowid={row_id}")
-    columns = [row[0] for row in cursor.description]
-    row = cursor.fetchone()
-    mdb_database[table_name].insert_one(apply_keys(columns, row))
-    print(f"[ \x1b[92mOK\x1b[0m ] Inserted row in MongoDB '{table_name}' collection")
-    sem.release()
-
-
-def __update(table_name, row_id, row_data_before, columns):
-    if argv[1] == "tiny":
-        sql_database = sqlite3.connect(current_path + '/../databases/tiny.db').cursor()
-    elif argv[1] == "full":
-        sql_database = sqlite3.connect(current_path + '/../databases/full.db').cursor()
-
-    cursor = sql_database.execute(f"select * from {table_name} where rowid={row_id}")
-    row = cursor.fetchone()
-    mdb_database[table_name].find_one_and_replace(apply_keys(columns, row_data_before), apply_keys(columns, row))
-    print(f"[ \x1b[92mOK\x1b[0m ] Updated row in MongoDB '{table_name}' collection")
-    sem.release()
+# Semaphore used for CLI print synchronisation
+sem = Lock()
 
 
 def __sqlite_to_mongodb(user_data, operation, db_name, table_name, row_id):
     """
     SQLite update hook callback function.
-
-    :param: user_data - The third param of the sqlite3_update_hook.
+    :param: user_data - The third param of the sqlite3_update_hook. (unused)
     :param: operation - One of the constants SQLITE_*.
-    :param: db_name - The affected database.
+    :param: db_name - The affected database. (unused)
     :param: table_name - The affected table.
     :param: row_id - The affected row ID.
     """
@@ -102,28 +64,30 @@ def __sqlite_to_mongodb(user_data, operation, db_name, table_name, row_id):
     table_name = table_name.decode().lower()
 
     if operation == SQLITE_DELETE:
-        print("[ \x1b[92mOK\x1b[0m ] Triggered delete hook")
-        print(f"[ \x1b[92mOK\x1b[0m ] Starting delete thread on {table_name}:{row_id}")
+        acknowledge("Triggered delete hook")
+        acknowledge(f"Starting delete thread on {table_name}:{row_id}")
 
         cursor = sql_database.execute(f"select * from {table_name} where rowid={row_id}")
         columns = [row[0] for row in cursor.description]
         row = cursor.fetchone()
-        threading.Thread(target=__delete, args=(table_name, row, columns)).start()
+
+        start_delete_thread(table_name, row, columns, sem, mdb_database)
 
     elif operation == SQLITE_INSERT:
-        print("[ \x1b[92mOK\x1b[0m ] Triggered insert hook")
-        print(f"[ \x1b[92mOK\x1b[0m ] Starting insert thread on {table_name}:{row_id}")
+        acknowledge("Triggered insert hook")
+        acknowledge(f"Starting insert thread on {table_name}:{row_id}")
 
-        threading.Thread(target=__insert, args=(table_name, row_id)).start()
+        start_insert_thread(table_name, row_id, sem, mdb_database)
 
     elif operation == SQLITE_UPDATE:
-        print("[ \x1b[92mOK\x1b[0m ] Triggered update hook")
-        print(f"[ \x1b[92mOK\x1b[0m ] Starting update thread on {table_name}:{row_id}")
+        acknowledge("Triggered update hook")
+        acknowledge(f"Starting update thread on {table_name}:{row_id}")
 
         cursor = sql_database.execute(f"select * from {table_name} where rowid={row_id}")
         columns = [row[0] for row in cursor.description]
         row = cursor.fetchone()
-        threading.Thread(target=__update, args=(table_name, row_id, row, columns)).start()
+        
+        start_update_thread(table_name, row_id, row, columns, sem, mdb_database)
 
 
 # Register hook

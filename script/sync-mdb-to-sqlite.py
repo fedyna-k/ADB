@@ -29,12 +29,16 @@ elif argv[1] == "full":
     sql_cursor = sql_database.cursor()
 
 
+# Helper functions
 join_filter = lambda d, s=" and ": s.join([f"{k}='{v}'" for k, v in d.items() if k != "_id"])
 get_c_v = lambda d: zip(*[(k, v) for k, v in d.items() if k != "_id"])
 
 
+# Change stream performs active wait, so there's no need for a while True here.
 change_stream = mdb_database.watch(full_document_before_change="required")
 for change in change_stream:
+    
+    # ---- INSERT ----
     if change["operationType"] == "insert":
         columns, values = get_c_v(change["fullDocument"])
 
@@ -43,6 +47,7 @@ for change in change_stream:
         sql_cursor.execute(f"insert into {change['ns']['coll']} {str(columns)} values {str(values)}")
         sql_database.commit()
         
+    # ---- UPDATE (replace in this case) ----
     if change["operationType"] == "replace":
         if change['ns']['coll'] == "movies":
             del change["fullDocument"]["mid"]
@@ -60,6 +65,7 @@ for change in change_stream:
         sql_cursor.execute(f"update {change['ns']['coll']} set {new} where {old}")
         sql_database.commit()
 
+    # ---- DELETE ----
     if change["operationType"] == "delete":
         old = join_filter(change["fullDocumentBeforeChange"])
         _, old_v = get_c_v(change['fullDocumentBeforeChange'])
